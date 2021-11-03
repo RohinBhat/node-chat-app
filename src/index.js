@@ -24,8 +24,6 @@ const publicDirectoriesPath = path.join(__dirname, "../public");
 app.use(express.static(publicDirectoriesPath));
 
 io.on("connection", (socket) => {
-  console.log("New websocket connection");
-
   socket.on("join", (options, callback) => {
     const { error, user } = addUser({
       id: socket.id,
@@ -40,13 +38,13 @@ io.on("connection", (socket) => {
 
     socket.emit(
       "message",
-      generateMessage("Admin", "Welcome to ultra pro chat app!")
+      generateMessage("admin", "Welcome to ultra pro chat app!")
     );
     socket.broadcast
       .to(user.room)
       .emit(
         "message",
-        generateMessage("Admin", `${user.username} has joined the room!`)
+        generateMessage("admin", `${user.username} has joined the room!`)
       );
     io.to(user.room).emit("roomData", {
       room: user.room,
@@ -87,7 +85,7 @@ io.on("connection", (socket) => {
     if (user) {
       io.to(user.room).emit(
         "message",
-        generateMessage("Admin", `${user.username} has left the room!`)
+        generateMessage("admin", `${user.username} has left the room!`)
       );
       io.to(user.room).emit("roomData", {
         room: user.room,
